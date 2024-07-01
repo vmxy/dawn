@@ -76,6 +76,12 @@ jobs:
       env:
         SCCACHE_GHA_ENABLED: "true"
         DEPOT_TOOLS_WIN_TOOLCHAIN: 0
+    # upload
+    - name: Upload Build
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-gn-${{ matrix.os }}-${{ matrix.build_type }}
+        path: ${{ steps.strings.outputs.build-output-dir }}
 
   cmake:
     strategy:
@@ -160,6 +166,13 @@ jobs:
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
       env:
         SCCACHE_GHA_ENABLED: "true"
+
+    # upload
+    - name: Upload Build
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-${{ matrix.os }}-${{ matrix.build_type }}
+        path: ${{ steps.strings.outputs.build-output-dir }}
 
   golang:
     name: Go Build and Test
